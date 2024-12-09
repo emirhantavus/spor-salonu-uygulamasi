@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Takip Sistemi</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <header>
+        <div class="navbar">
+            <h1>Fitness Takip Sistemi</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'uye_kayit' %}">Üye Kaydı</a></li>
+                    <li><a href="{% url 'uye_listesi' %}">Üye Listesi</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+
+    <footer>
+        <p>&copy; footer yeri</p>
+    </footer>
+</body>
+</html>

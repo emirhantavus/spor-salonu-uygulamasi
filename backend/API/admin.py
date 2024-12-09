@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Kullanici, IslemGecmisi , UyelikGecmisi
 
-# Register your models here.
+admin.site.register(Kullanici)
+admin.site.register(IslemGecmisi)
+admin.site.register(UyelikGecmisi)

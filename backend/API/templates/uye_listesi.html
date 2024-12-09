@@ -1,0 +1,31 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="list-container">
+    <h2>Üye Listesi</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Ad Soyad</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Üyelik Süresi</th>
+                <th>Ücret</th>
+                <th>Telefon Numarası</th>
+                <th>Notlar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uye in uyeler %}
+            <tr>
+                <td>{{ uye.ad_soyad }}</td>
+                <td>{{ uye.baslangic_tarihi }}</td>
+                <td>{{ uye.uyelik_suresi_ay }}</td>
+                <td>{{ uye.ucret }}</td>
+                <td>{{ uye.tel_no }}</td>
+                <td>{{ uye.notlar }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
