@@ -1,13 +1,20 @@
 from django.db import models
-
+from datetime import timedelta
+from django.utils.timezone import now
 
 class Kullanici(models.Model):
       ad_soyad = models.CharField(max_length=255)
-      baslangic_tarihi = models.DateField()
+      baslangic_tarihi = models.DateField(auto_now_add=True)
       uyelik_suresi_ay = models.IntegerField()
       ucret = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
       tel_no = models.CharField(max_length=15, null=True, blank=True)
       notlar = models.TextField(null=True, blank=True)
+      
+      def hesapla_kalan_gun(self):
+            bitis_tarihi = self.baslangic_tarihi + timedelta(days=self.uyelik_suresi_ay*31)
+            kalan_gun = (bitis_tarihi - now().date()).days
+            
+            return kalan_gun if kalan_gun > 0 else 0 
       
       def __str__(self):
             return self.ad_soyad

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Takip Sistemi</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    
     <header>
         <div class="navbar">
             <h1>Fitness Takip Sistemi</h1>
@@ -19,16 +19,9 @@
             </nav>
         </div>
     </header>
-
-
     <main>
         {% block content %}
         {% endblock %}
     </main>
-
-
-    <footer>
-        <p>&copy; footer yeri</p>
-    </footer>
 </body>
 </html>
