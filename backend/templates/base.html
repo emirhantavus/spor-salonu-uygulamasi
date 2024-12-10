@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Takip Sistemi</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -16,6 +14,8 @@
                 <ul>
                     <li><a href="{% url 'uye_kayit' %}">Üye Kaydı</a></li>
                     <li><a href="{% url 'uye_listesi' %}">Üye Listesi</a></li>
+                    <li><a href="{% url 'suresi_biten_uyeler' %}">Süresi Biten Üye Listesi</a></li>
+                    <li><a href="{% url 'suresi_yaklasan_uyeler' %}">Süresi Yaklasan Üye Listesi</a></li>
                 </ul>
             </nav>
         </div>
