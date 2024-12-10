@@ -10,14 +10,15 @@ class Kullanici(models.Model):
       tel_no = models.CharField(max_length=15, null=True, blank=True)
       notlar = models.TextField(null=True, blank=True)
       
+      @property
       def hesapla_kalan_gun(self):
             bitis_tarihi = self.baslangic_tarihi + timedelta(days=self.uyelik_suresi_ay*31)
             kalan_gun = (bitis_tarihi - now().date()).days
             
-            return kalan_gun if kalan_gun > 0 else 0 
+            return max(kalan_gun, 0)
       
       def __str__(self):
-            return self.ad_soyad
+            return f"{self.ad_soyad}  --  {self.hesapla_kalan_gun}"
       
 class IslemGecmisi(models.Model):
       kullanici = models.ForeignKey(Kullanici, on_delete=models.CASCADE, related_name='islem_gecmisi')

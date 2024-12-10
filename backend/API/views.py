@@ -21,3 +21,7 @@ def uye_kayit(request):
 
             return redirect('uye_kayit')
       return render(request, 'uye_kayit.html')
+
+def uye_listesi(request):
+      uyeler = Kullanici.objects.all()
+      return render(request, 'uye_listesi.html', {'uyeler':uyeler})
