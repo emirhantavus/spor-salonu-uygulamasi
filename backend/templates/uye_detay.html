@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/uye_detay.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="list-container">
+    <h2>Üye Detayları</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ad Soyad</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Üyelik Süresi (Ay)</th>
+                <th>Ücret</th>
+                <th>Telefon Numarası</th>
+                <th>Notlar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ uye.id }}</td>
+                <td>{{ uye.ad_soyad }}</td>
+                <td>{{ uye.baslangic_tarihi }}</td>
+                <td>{{ uye.uyelik_suresi_ay }}</td>
+                <td>{{ uye.ucret }}</td>
+                <td>{{ uye.tel_no }}</td>
+                <td>{{ uye.notlar }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="form-section">
+        <h3>Süre Uzatma</h3>
+        <form method="POST" action="{% url 'uye_detay' uye.id %}">
+            {% csrf_token %}
+            <label for="sure">Süre Uzatma (Ay):</label>
+            <input type="number" id="sure" name="sure" min="1" required>
+            <button type="submit">Süreyi Uzat</button>
+        </form>
+
+        <h3>Not Güncelleme</h3>
+        <form method="POST" action="{% url 'uye_detay' uye.id %}">
+            {% csrf_token %}
+            <label for="notlar">Notlar:</label>
+            <textarea id="notlar" name="notlar" rows="4">{{ uye.notlar }}</textarea>
+            <button type="submit">Güncelle</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
