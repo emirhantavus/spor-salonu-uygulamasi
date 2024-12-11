@@ -39,3 +39,12 @@ class UyelikGecmisi(models.Model):
 
       def __str__(self):
           return f"{self.ad_soyad} - {self.baslangic_tarihi}"
+
+
+class MesajGecmisi(models.Model):
+      kullanici = models.ForeignKey(Kullanici, on_delete=models.CASCADE)
+      mesaj_tarihi = models.DateField()
+      mesaj_turu = models.CharField(max_length=50)
+           
+      class Meta:
+            unique_together = ('kullanici', 'mesaj_tarihi', 'mesaj_turu')
