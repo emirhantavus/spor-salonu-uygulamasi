@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/uye_listele.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="list-container">
+    <h2>İşlem Geçmişi</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Kullanıcı</th>
+                <th>İşlem Tipi</th>
+                <th>Tarih</th>
+                <th>Ücret</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for islem in islem_gecmisi %}
+            <tr>
+                <td>{{ islem.id }}</td>
+                <td>{{ islem.kullanici.ad_soyad }}</td>
+                <td>{{ islem.islem_tipi }}</td>
+                <td>{{ islem.tarih }}</td>
+                <td>{{ islem.ucret }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

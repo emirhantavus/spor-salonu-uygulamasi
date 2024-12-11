@@ -25,7 +25,7 @@
             {% for uye in suresi_biten_uyeler %}
             <tr>
                 <td>{{ uye.id }}</td>
-                <td>{{ uye.ad_soyad }}</td>
+                <td><a href="{% url 'uye_detay' uye.id %}">{{ uye.ad_soyad }}</a></td>
                 <td>{{ uye.baslangic_tarihi }}</td>
                 <td>{{ uye.uyelik_suresi_ay }}</td>
                 <td>{{ uye.hesapla_kalan_gun }}</td>

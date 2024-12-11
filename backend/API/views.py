@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect , get_object_or_404
-from .models import Kullanici
+from .models import Kullanici , IslemGecmisi
 from django.utils.timezone import now
 from django.http import HttpResponse
 def uye_kayit(request):
@@ -18,6 +18,12 @@ def uye_kayit(request):
                   uyelik_suresi_ay=uyelik_suresi,
                   notlar=notlar)
             yeni_uye.save()
+            
+            IslemGecmisi.objects.create(
+                  kullanici=yeni_uye,
+                  islem_tipi="Yeni Üye Eklendi",
+                  ucret = ucret
+            )
 
             return redirect('uye_kayit')
       return render(request, 'uye_kayit.html')
@@ -49,12 +55,26 @@ def uye_detay(request, id):
                     if ay > 0:
                         uye.uyelik_suresi_ay += ay
                         uye.save()
+                        IslemGecmisi.objects.create(
+                              kullanici=uye,
+                              islem_tipi=f"Üyelik Süresi ' {ay} ' Uzatıldı",
+                              ucret=uye.ucret
+                        )
                 except ValueError:
                     return HttpResponse("Geçersiz süre değeri.", status=400)
 
             if yeni_not:
-                uye.notlar = yeni_not
-                uye.save()
+                  uye.notlar = yeni_not
+                  uye.save()
+            else:
+                  uye.notlar = ''
+                  uye.save()
+                
 
             return redirect('uye_detay', id=uye.id)
       return render(request, 'uye_detay.html', {'uye': uye})
+
+
+def islem_gecmisi(request):
+      islem_gecmisi = IslemGecmisi.objects.all()
+      return render(request, 'islem_gecmisi.html',{'islem_gecmisi':islem_gecmisi})
