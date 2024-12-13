@@ -24,7 +24,7 @@
                 <td>{{ islem.id }}</td>
                 <td>{{ islem.kullanici.ad_soyad }}</td>
                 <td>{{ islem.islem_tipi }}</td>
-                <td>{{ islem.tarih }}</td>
+                <td>{{ islem.tarih|date:"d.m.Y" }}</td>
                 <td>{{ islem.ucret }}</td>
             </tr>
             {% endfor %}

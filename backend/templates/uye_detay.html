@@ -49,6 +49,14 @@
             <textarea id="notlar" name="notlar" rows="4">{{ uye.notlar }}</textarea>
             <button type="submit">Güncelle</button>
         </form>
+
+        <h3>Mesaj Gönder</h3>
+        <form method="POST" action="{% url 'uye_detay' uye.id %}">
+            {% csrf_token %}
+            <label for="mesaj">Mesaj:</label>
+            <textarea id="mesaj" name="mesaj" rows="3" placeholder="Mesajınızı buraya yazınız..." required></textarea>
+            <button type="submit">Mesaj Gönder</button>
+        </form>
     </div>
 </div>
 {% endblock %}

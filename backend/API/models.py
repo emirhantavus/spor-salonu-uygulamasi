@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import timedelta , date
-from django.utils.timezone import now
+from django.utils.timezone import now , localtime
 
 class Kullanici(models.Model):
       ad_soyad = models.CharField(max_length=255)
@@ -16,6 +16,9 @@ class Kullanici(models.Model):
             kalan_gun = (bitis_tarihi - now().date()).days
             
             return max(kalan_gun, 0)
+      
+      def format_tarih(self):
+            return localtime(self.baslangic_tarihi).strftime("%d.%m.%Y")
       
       def __str__(self):
             return f"{self.ad_soyad}  --  {self.hesapla_kalan_gun}"
@@ -43,8 +46,5 @@ class UyelikGecmisi(models.Model):
 
 class MesajGecmisi(models.Model):
       kullanici = models.ForeignKey(Kullanici, on_delete=models.CASCADE)
-      mesaj_tarihi = models.DateField()
-      mesaj_turu = models.CharField(max_length=50)
-           
-      class Meta:
-            unique_together = ('kullanici', 'mesaj_tarihi', 'mesaj_turu')
+      mesaj_tarihi = models.DateField(default=now)
+      mesaj = models.TextField()

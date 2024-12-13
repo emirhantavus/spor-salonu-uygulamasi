@@ -26,7 +26,7 @@
             <tr>
                 <td>{{ uye.id }}</td>
                 <td><a href="{% url 'uye_detay' uye.id %}">{{ uye.ad_soyad }}</a></td>
-                <td>{{ uye.baslangic_tarihi }}</td>
+                <td>{{ uye.baslangic_tarihi|date:"d.m.Y" }}</td>
                 <td>{{ uye.uyelik_suresi_ay }}</td>
                 <td>{{ uye.hesapla_kalan_gun }}</td>
                 <td>{{ uye.ucret }}</td>
