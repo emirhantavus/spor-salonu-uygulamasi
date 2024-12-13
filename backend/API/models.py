@@ -14,7 +14,6 @@ class Kullanici(models.Model):
       def hesapla_kalan_gun(self):
             bitis_tarihi = self.baslangic_tarihi + timedelta(days=self.uyelik_suresi_ay*31)
             kalan_gun = (bitis_tarihi - now().date()).days
-            
             return max(kalan_gun, 0)
       
       def format_tarih(self):
@@ -46,5 +45,8 @@ class UyelikGecmisi(models.Model):
 
 class MesajGecmisi(models.Model):
       kullanici = models.ForeignKey(Kullanici, on_delete=models.CASCADE)
-      mesaj_tarihi = models.DateField(default=now)
+      mesaj_tarihi = models.DateField(date.today)
       mesaj = models.TextField()
+      
+      def format_tarih(self):
+            return localtime(self.mesaj_tarihi).strftime("%d.%m.%Y")

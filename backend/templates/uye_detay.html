@@ -15,6 +15,7 @@
                 <th>Ad Soyad</th>
                 <th>Başlangıç Tarihi</th>
                 <th>Üyelik Süresi (Ay)</th>
+                <th>Kalan Gün</th>
                 <th>Ücret</th>
                 <th>Telefon Numarası</th>
                 <th>Notlar</th>
@@ -24,8 +25,9 @@
             <tr>
                 <td>{{ uye.id }}</td>
                 <td>{{ uye.ad_soyad }}</td>
-                <td>{{ uye.baslangic_tarihi }}</td>
+                <td>{{ uye.baslangic_tarihi|date:"d.m.Y" }}</td>
                 <td>{{ uye.uyelik_suresi_ay }}</td>
+                <td>{{ uye.hesapla_kalan_gun }}</td>
                 <td>{{ uye.ucret }}</td>
                 <td>{{ uye.tel_no }}</td>
                 <td>{{ uye.notlar }}</td>

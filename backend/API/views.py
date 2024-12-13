@@ -61,30 +61,27 @@ def uye_detay(request, id):
                         uye.save()
                         IslemGecmisi.objects.create(
                               kullanici=uye,
-                              islem_tipi=f"Üyelik Süresi ' {ay} ' Uzatıldı",
+                              islem_tipi=f"Üyelik Süresi '{ay}' ay Uzatıldı",
                               ucret=uye.ucret
                         )
                 except ValueError:
                     return HttpResponse("Geçersiz süre değeri.", status=400)
 
-            if yeni_not:
+            if yeni_not is not None:
+                  #if yeni_not.strip():
                   uye.notlar = yeni_not
-                  uye.save()
-            else:
-                  uye.notlar = ''
                   uye.save()
                   
             if mesaj:
                   try:
                         whatsapp_mesaj_gonder(f"+9{uye.tel_no}", mesaj)
-                        MesajGecmisi.objects.create(Kullanici=uye, mesaj=mesaj)
+                        MesajGecmisi.objects.create(kullanici=uye, mesaj=mesaj)
                         messages.success(request, "Mesaj Başariyla Gönderildi")
                   except Exception as e:
                         messages.error(request, f"Mesaj Gönderilemedi: {e}")
                 
 
             return redirect('uye_detay', id=uye.id)
-      uye.baslangic_tarihi = format(uye.baslangic_tarihi, 'd.m.Y')
       return render(request, 'uye_detay.html', {'uye': uye})
 
 
@@ -97,34 +94,36 @@ import pywhatkit
 
 def whatsapp_mesaj_gonder(telefon_numarasi, mesaj):
       try:
-            pywhatkit.sendwhatmsg_instantly(telefon_numarasi,mesaj)
+            pywhatkit.sendwhatmsg_instantly(telefon_numarasi, mesaj)
             print(f"Mesaj gönderildi: {telefon_numarasi} -> {mesaj}")
       except Exception as e:
             print(f"Mesaj gönderilirken hata oluştu: {e}")
             
-def uyelik_bildirimi_gonder():
-      bugun = now().date()
-      kullanicilar = Kullanici.objects.all()
+            
+#İleride istenilirse kullanılabilir otomatik bildirim göndermek icin. 3 gün kalınca veya bitince bild gönderir.
+# def uyelik_bildirimi_gonder():
+#       bugun = now().date()
+#       kullanicilar = Kullanici.objects.all()
       
-      for kullanici in kullanicilar:
-            bitis_tarihi = kullanici.baslangic_tarihi + timedelta(days=kullanici.uyelik_suresi_ay*31)
-            kalan_gun = (bitis_tarihi - bugun).days
+#       for kullanici in kullanicilar:
+#             bitis_tarihi = kullanici.baslangic_tarihi + timedelta(days=kullanici.uyelik_suresi_ay*31)
+#             kalan_gun = (bitis_tarihi - bugun).days
             
-            if not kullanici.tel_no:
-                  continue
+#             if not kullanici.tel_no:
+#                   continue
             
-            if kalan_gun == 3:
-                  mesaj_turu = "3_gün_kaldi"
-                  if not MesajGecmisi.objects.filter(kullanici=kullanici, mesaj_tarihi=bugun, mesaj_turu=mesaj_turu).exists():
-                        mesaj = f"Merhaba {kullanici.ad_soyad}, üyeliğinizin bitmesine 3 gün kaldı. Klas-fitness"
-                        whatsapp_mesaj_gonder(f"+90{kullanici.tel_no}",mesaj)
-                        MesajGecmisi.objects.create(kullanici=kullanici,mesaj_tarihi=bugun, mesaj_turu=mesaj_turu)
-            elif kalan_gun == 0:
-                  mesaj_turu = "uyelik_bitti"
-                  if not MesajGecmisi.objects.filter(kullanici=kullanici, mesaj_tarihi=bugun, mesaj_turu=mesaj_turu).exists():
-                        mesaj = f"Merhaba {kullanici.ad_soyad}, üyeliğiniz bugün sona ermiştir. Lütfen sürenizi yenileyin. Klas-fitness"
-                        whatsapp_mesaj_gonder(f"+90{kullanici.tel_no}", mesaj)
-                        MesajGecmisi.objects.create(kullanici=kullanici, mesaj_tarihi=bugun, mesaj_turu=mesaj_turu)
+#             if kalan_gun == 3:
+#                   mesaj_turu = "3_gün_kaldi"
+#                   if not MesajGecmisi.objects.filter(kullanici=kullanici, mesaj_tarihi=bugun, mesaj_turu=mesaj_turu).exists():
+#                         mesaj = f"Merhaba {kullanici.ad_soyad}, üyeliğinizin bitmesine 3 gün kaldı. Klas-fitness"
+#                         whatsapp_mesaj_gonder(f"+90{kullanici.tel_no}",mesaj)
+#                         MesajGecmisi.objects.create(kullanici=kullanici,mesaj_tarihi=bugun, mesaj_turu=mesaj_turu)
+#             elif kalan_gun == 0:
+#                   mesaj_turu = "uyelik_bitti"
+#                   if not MesajGecmisi.objects.filter(kullanici=kullanici, mesaj_tarihi=bugun, mesaj_turu=mesaj_turu).exists():
+#                         mesaj = f"Merhaba {kullanici.ad_soyad}, üyeliğiniz bugün sona ermiştir. Lütfen sürenizi yenileyin. Klas-fitness"
+#                         whatsapp_mesaj_gonder(f"+90{kullanici.tel_no}", mesaj)
+#                         MesajGecmisi.objects.create(kullanici=kullanici, mesaj_tarihi=bugun, mesaj_turu=mesaj_turu)
                         
                         
 def mesaj_gecmisi(request):

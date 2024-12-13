@@ -10,6 +10,7 @@
 <table>
     <thead>
         <tr>
+            <th>ID</th>
             <th>Ad Soyad</th>
             <th>Telefon Numarası</th>
             <th>Mesaj</th>
@@ -19,10 +20,11 @@
     <tbody>
         {% for mesaj in mesajlar %}
         <tr>
+            <td>{{mesaj.id}}</td>
             <td>{{ mesaj.kullanici.ad_soyad }}</td>
             <td>{{ mesaj.kullanici.tel_no }}</td>
             <td>{{ mesaj.mesaj }}</td>
-            <td>{{ mesaj.mesaj_tarihi|date:"d-m-Y H:i" }}</td>
+            <td>{{ mesaj.mesaj_tarihi|date:"d.m.Y" }}</td>
         </tr>
         {% endfor %}
     </tbody>
