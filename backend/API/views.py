@@ -6,6 +6,8 @@ from django.utils.dateformat import format
 from django.contrib import messages
 from datetime import date, timedelta
 import pywhatkit
+import pandas as pd
+from time import gmtime, strftime
 
 def uye_kayit(request):
       if request.method == 'POST':
@@ -60,6 +62,7 @@ def uye_detay(request, id):
                     ay = int(ay)
                     if ay > 0:
                         uye.uyelik_suresi_ay += ay
+                        uye.bitis_tarihi += timedelta(days=ay*31)
                         uye.save()
                         IslemGecmisi.objects.create(
                               kullanici=uye,
@@ -121,3 +124,17 @@ def islem_gecmisi(request):
 def mesaj_gecmisi(request):
       mesajlar = MesajGecmisi.objects.all()
       return render(request, 'mesaj_listesi.html',{'mesajlar':mesajlar})
+
+
+def excel_kaydet(request):
+      time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+      kullanicilar = Kullanici.objects.all().values()
+      df = pd.DataFrame(kullanicilar)
+      
+      df['baslangic_tarihi'] = pd.to_datetime(df['baslangic_tarihi'], errors='coerce')
+     
+      df['baslangic_tarihi'] = df['baslangic_tarihi'].dt.strftime("%d-%m-%Y")
+      response = HttpResponse(content_type='application/vnd.ms-excel')
+      response['Content-Disposition'] = f'attachment; filename="kullanicilar-{time}.xlsx"'
+      df.to_excel(response, index=False, engine='openpyxl')
+      return response

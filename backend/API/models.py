@@ -6,9 +6,15 @@ class Kullanici(models.Model):
       ad_soyad = models.CharField(max_length=255)
       baslangic_tarihi = models.DateField(default=date.today) # sonra değişecek. test amaclı böyle kaldı unutma.
       uyelik_suresi_ay = models.IntegerField()
+      bitis_tarihi = models.DateField(null=True, blank=True)
       ucret = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
       tel_no = models.CharField(max_length=15, null=True, blank=True)
       notlar = models.TextField(null=True, blank=True)
+      
+      def save(self, *args,**kwargs):
+            if not self.bitis_tarihi:
+                  self.bitis_tarihi = self.baslangic_tarihi + timedelta(days=self.uyelik_suresi_ay * 31)
+            super().save(*args,**kwargs)
       
       @property
       def hesapla_kalan_gun(self):
