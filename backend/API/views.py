@@ -4,6 +4,8 @@ from django.utils.timezone import now
 from django.http import HttpResponse
 from django.utils.dateformat import format
 from django.contrib import messages
+from datetime import date, timedelta
+import pywhatkit
 
 def uye_kayit(request):
       if request.method == 'POST':
@@ -74,11 +76,11 @@ def uye_detay(request, id):
                   
             if mesaj:
                   try:
-                        whatsapp_mesaj_gonder(f"+9{uye.tel_no}", mesaj)
+                        pywhatkit.sendwhatmsg_instantly(f"+9{uye.tel_no}", mesaj)
+                        print(f"Mesaj gönderildi: {uye.tel_no} -> {mesaj}")
                         MesajGecmisi.objects.create(kullanici=uye, mesaj=mesaj)
-                        messages.success(request, "Mesaj Başariyla Gönderildi")
                   except Exception as e:
-                        messages.error(request, f"Mesaj Gönderilemedi: {e}")
+                        print(f"mesaj gönderilemedi {e}")
                 
 
             return redirect('uye_detay', id=uye.id)
@@ -88,16 +90,6 @@ def uye_detay(request, id):
 def islem_gecmisi(request):
       islem_gecmisi = IslemGecmisi.objects.all()
       return render(request, 'islem_gecmisi.html',{'islem_gecmisi':islem_gecmisi})
-
-from datetime import date, timedelta
-import pywhatkit
-
-def whatsapp_mesaj_gonder(telefon_numarasi, mesaj):
-      try:
-            pywhatkit.sendwhatmsg_instantly(telefon_numarasi, mesaj)
-            print(f"Mesaj gönderildi: {telefon_numarasi} -> {mesaj}")
-      except Exception as e:
-            print(f"Mesaj gönderilirken hata oluştu: {e}")
             
             
 #İleride istenilirse kullanılabilir otomatik bildirim göndermek icin. 3 gün kalınca veya bitince bild gönderir.
