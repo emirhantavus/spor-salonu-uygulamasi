@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path
 from .views import (uye_kayit , uye_listesi, suresi_biten_uyeler,
                     suresi_yaklasan_uyeler , uye_detay , islem_gecmisi,
-                    mesaj_gecmisi , excel_kaydet)
+                    mesaj_gecmisi , excel_kaydet, uyelik_gecmisi,
+                    aktif_uyeler)
 
 urlpatterns = [
     path('uyeler-ekle/',uye_kayit, name='uye_kayit'),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('islem-gecmisi/',islem_gecmisi,name='islem_gecmisi'),
     path('mesaj-gecmisi/',mesaj_gecmisi,name='mesaj_gecmisi'),
     path('excel-kaydet/',excel_kaydet, name='excel_kaydet'),
+    path('uyelik-gecmisi/',uyelik_gecmisi, name='uyelik_gecmisi'),
+    path('aktif-uyeler/',aktif_uyeler, name='aktif_uyeler'),
 ]

@@ -13,7 +13,7 @@ class Kullanici(models.Model):
       
       def save(self, *args,**kwargs):
             if not self.bitis_tarihi:
-                  self.bitis_tarihi = self.baslangic_tarihi + timedelta(days=self.uyelik_suresi_ay * 31)
+                  self.bitis_tarihi = self.baslangic_tarihi + timedelta(days=self.uyelik_suresi_ay * 30)
             super().save(*args,**kwargs)
       
       @property
@@ -41,12 +41,13 @@ class UyelikGecmisi(models.Model):
       kullanici = models.ForeignKey(Kullanici, on_delete=models.CASCADE, related_name='uyelik_gecmisi')
       ad_soyad = models.CharField(max_length=255)
       baslangic_tarihi = models.DateField()
+      bitis_tarihi = models.DateField(default=date.today)
       uyelik_suresi_ay = models.IntegerField()
       ucret = models.DecimalField(max_digits=10, decimal_places=2)
       tel_no = models.CharField(max_length=15, null=True, blank=True)
 
       def __str__(self):
-          return f"{self.ad_soyad} - {self.baslangic_tarihi}"
+          return f"{self.ad_soyad} - {self.baslangic_tarihi} - {self.bitis_tarihi}"
 
 
 class MesajGecmisi(models.Model):

@@ -36,6 +36,16 @@ def uye_kayit(request):
                   islem_tipi="Yeni Üye Eklendi",
                   ucret = ucret
             )
+            
+            UyelikGecmisi.objects.create(
+                  kullanici=yeni_uye,
+                  ad_soyad= ad_soyad,
+                  baslangic_tarihi=yeni_uye.baslangic_tarihi,
+                  uyelik_suresi_ay=yeni_uye.uyelik_suresi_ay,
+                  ucret=yeni_uye.ucret,
+                  tel_no=yeni_uye.tel_no,
+                  bitis_tarihi=yeni_uye.bitis_tarihi
+            )
 
             return redirect('uye_kayit')
       return render(request, 'uye_kayit.html')
@@ -161,3 +171,12 @@ def excel_kaydet(request):
       response = HttpResponse(zip_buffer, content_type='application/zip')
       response['Content-Disposition'] = f'attachment; filename="veri_kayitlari_{time}.zip"'
       return response
+
+def uyelik_gecmisi(request):
+      uyeler = UyelikGecmisi.objects.all()
+      return render(request, 'uyelik_gecmisi.html',{'uyeler':uyeler})
+
+def aktif_uyeler(request):
+      tum_uyeler = Kullanici.objects.all()
+      a_uyeler = [uye for uye in tum_uyeler if uye.hesapla_kalan_gun > 0]
+      return render(request, 'aktif_uye_listesi.html',{'aktif_uyeler':a_uyeler})

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/uye_listele.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="list-container">
+    <h2>Aktif Üye Listesi</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ad Soyad</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Bitis Tarihi</th>
+                <th>Üyelik Süresi (Ay)</th>
+                <th>Kalan Gün</th>
+                <th>Ücret</th>
+                <th>Telefon Numarası</th>
+                <th>Notlar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uye in aktif_uyeler %}
+            <tr>
+                <td>{{ uye.id }}</td>
+                <td><a href="{% url 'uye_detay' uye.id %}">{{ uye.ad_soyad }}</a></td>
+                <td>{{ uye.baslangic_tarihi|date:"d.m.Y" }}</td>
+                <td>{{ uye.bitis_tarihi|date:"d.m.Y" }}</td>
+                <td>{{ uye.uyelik_suresi_ay }}</td>
+                <td>{{ uye.hesapla_kalan_gun }}</td>
+                <td>{{ uye.ucret }}</td>
+                <td>{{ uye.tel_no }}</td>
+                <td>{{ uye.notlar }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
