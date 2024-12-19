@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Takip Sistemi</title>
+    <title>Klas Fitness Takip Sistemi</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header>
         <div class="navbar">
-            <h1>Fitness Takip Sistemi</h1>
+            <h1>Klas Fitness Takip Sistemi</h1>
             <nav>
                 <ul>
                     <li><a href="{% url 'uye_kayit' %}">Üye Kaydı</a></li>
@@ -18,6 +20,7 @@
                     <li><a href="{% url 'suresi_yaklasan_uyeler' %}">Süresi Yaklasan Üye Listesi</a></li>
                     <li><a href="{% url 'islem_gecmisi' %}">İslem Gecmisi</a></li>
                     <li><a href="{% url 'mesaj_gecmisi' %}">Mesaj Gecmisi</a></li>
+                    <li><a href="{% url 'excel_kaydet' %}">Verileri Excele Kaydet</a></li>
                 </ul>
             </nav>
         </div>

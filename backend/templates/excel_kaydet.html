@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Excel İşlemleri</h1>
+
+    <div>
+        <h2>Verileri Kaydet</h2>
+        <a href="{% url 'excel_kaydet' %}" class="btn btn-primary">Verileri Kaydet</a>
+    </div>
+
+    <hr>
+
+    <div>
+        <h2>Verileri Programa Çek</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="excel_file">Excel Dosyasını Seç:</label>
+            <input type="file" name="excel_file" id="excel_file" accept=".xlsx, .xls">
+            <br><br>
+            <button type="submit" formaction="{% url 'veri_yukle_kullanici' %}">Kullanıcıları Yükle</button>
+            <button type="submit" formaction="{% url 'veri_yukle_islem' %}">İşlem Geçmişini Yükle</button>
+            <button type="submit" formaction="{% url 'veri_yukle_mesaj' %}">Mesaj Geçmişini Yükle</button>
+            <button type="submit" formaction="{% url 'veri_yukle_uyelik' %}">Üyelik Geçmişini Yükle</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

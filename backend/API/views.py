@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect , get_object_or_404
-from .models import Kullanici , IslemGecmisi , MesajGecmisi
+from .models import Kullanici , IslemGecmisi , MesajGecmisi , UyelikGecmisi
 from django.utils.timezone import now
 from django.http import HttpResponse
 from django.utils.dateformat import format
@@ -8,6 +8,11 @@ from datetime import date, timedelta
 import pywhatkit
 import pandas as pd
 from time import gmtime, strftime
+import os
+from django.conf import settings
+from io import BytesIO
+from zipfile import ZipFile
+
 
 def uye_kayit(request):
       if request.method == 'POST':
@@ -127,14 +132,32 @@ def mesaj_gecmisi(request):
 
 
 def excel_kaydet(request):
-      time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-      kullanicilar = Kullanici.objects.all().values()
-      df = pd.DataFrame(kullanicilar)
+      time = strftime("%Y-%m-%d_%H-%M-%S", gmtime())
+      folder_name = f"veri_kayitlari_{time}"
+      folder_path = os.path.join(settings.BASE_DIR,folder_name)
+      os.makedirs(folder_path, exist_ok=True)
       
-      df['baslangic_tarihi'] = pd.to_datetime(df['baslangic_tarihi'], errors='coerce')
-     
-      df['baslangic_tarihi'] = df['baslangic_tarihi'].dt.strftime("%d-%m-%Y")
-      response = HttpResponse(content_type='application/vnd.ms-excel')
-      response['Content-Disposition'] = f'attachment; filename="kullanicilar-{time}.xlsx"'
-      df.to_excel(response, index=False, engine='openpyxl')
+      modeller = {
+            'kullanicilar': Kullanici.objects.all().values(),
+            'islem_gecmisi': IslemGecmisi.objects.all().values(),
+            'mesaj_gecmisi': MesajGecmisi.objects.all().values(),
+            'uyelik_gecmisi': UyelikGecmisi.objects.all().values(),
+      }
+      excel_files = []
+      
+      for name, data in modeller.items():
+            df = pd.DataFrame(data)
+            file_name = f"{name}-{time}.xlsx"
+            file_path = os.path.join(folder_path, file_name)
+            df.to_excel(file_path, index=False, engine='openpyxl')
+            excel_files.append(file_path)
+            
+      zip_buffer = BytesIO()
+      with ZipFile(zip_buffer, 'w') as zip_file:
+            for file in excel_files:
+                  zip_file.write(file, os.path.basename(file))
+      zip_buffer.seek(0)
+
+      response = HttpResponse(zip_buffer, content_type='application/zip')
+      response['Content-Disposition'] = f'attachment; filename="veri_kayitlari_{time}.zip"'
       return response
